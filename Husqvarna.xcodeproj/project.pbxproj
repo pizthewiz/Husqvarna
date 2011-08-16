@@ -1,0 +1,243 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D8616E8E13FA05DE00C6F761 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8616E8D13FA05DE00C6F761 /* Foundation.framework */; };
+		D8616E9113FA05DE00C6F761 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8616E9013FA05DE00C6F761 /* main.m */; };
+		D8616E9513FA05DE00C6F761 /* Husqvarna.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8616E9413FA05DE00C6F761 /* Husqvarna.1 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D8616E8713FA05DE00C6F761 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				D8616E9513FA05DE00C6F761 /* Husqvarna.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		D8616E8913FA05DE00C6F761 /* Husqvarna */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Husqvarna; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8616E8D13FA05DE00C6F761 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D8616E9013FA05DE00C6F761 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D8616E9313FA05DE00C6F761 /* Husqvarna-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Husqvarna-Prefix.pch"; sourceTree = "<group>"; };
+		D8616E9413FA05DE00C6F761 /* Husqvarna.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Husqvarna.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D8616E8613FA05DE00C6F761 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8616E8E13FA05DE00C6F761 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D8616E7E13FA05DD00C6F761 = {
+			isa = PBXGroup;
+			children = (
+				D8616E8F13FA05DE00C6F761 /* Husqvarna */,
+				D8616E8C13FA05DE00C6F761 /* Frameworks */,
+				D8616E8A13FA05DE00C6F761 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D8616E8A13FA05DE00C6F761 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8616E8913FA05DE00C6F761 /* Husqvarna */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8616E8C13FA05DE00C6F761 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8616E8D13FA05DE00C6F761 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D8616E8F13FA05DE00C6F761 /* Husqvarna */ = {
+			isa = PBXGroup;
+			children = (
+				D8616E9013FA05DE00C6F761 /* main.m */,
+				D8616E9413FA05DE00C6F761 /* Husqvarna.1 */,
+				D8616E9213FA05DE00C6F761 /* Supporting Files */,
+			);
+			path = Husqvarna;
+			sourceTree = "<group>";
+		};
+		D8616E9213FA05DE00C6F761 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D8616E9313FA05DE00C6F761 /* Husqvarna-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D8616E8813FA05DE00C6F761 /* Husqvarna */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8616E9813FA05DE00C6F761 /* Build configuration list for PBXNativeTarget "Husqvarna" */;
+			buildPhases = (
+				D8616E8513FA05DE00C6F761 /* Sources */,
+				D8616E8613FA05DE00C6F761 /* Frameworks */,
+				D8616E8713FA05DE00C6F761 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Husqvarna;
+			productName = Husqvarna;
+			productReference = D8616E8913FA05DE00C6F761 /* Husqvarna */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D8616E8013FA05DD00C6F761 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Chorded Constructions";
+			};
+			buildConfigurationList = D8616E8313FA05DD00C6F761 /* Build configuration list for PBXProject "Husqvarna" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D8616E7E13FA05DD00C6F761;
+			productRefGroup = D8616E8A13FA05DE00C6F761 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D8616E8813FA05DE00C6F761 /* Husqvarna */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8616E8513FA05DE00C6F761 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8616E9113FA05DE00C6F761 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D8616E9613FA05DE00C6F761 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Debug;
+		};
+		D8616E9713FA05DE00C6F761 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Release;
+		};
+		D8616E9913FA05DE00C6F761 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Husqvarna/Husqvarna-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D8616E9A13FA05DE00C6F761 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Husqvarna/Husqvarna-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D8616E8313FA05DD00C6F761 /* Build configuration list for PBXProject "Husqvarna" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8616E9613FA05DE00C6F761 /* Debug */,
+				D8616E9713FA05DE00C6F761 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8616E9813FA05DE00C6F761 /* Build configuration list for PBXNativeTarget "Husqvarna" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8616E9913FA05DE00C6F761 /* Debug */,
+				D8616E9A13FA05DE00C6F761 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D8616E8013FA05DD00C6F761 /* Project object */;
+}
