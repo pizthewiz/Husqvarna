@@ -13,9 +13,10 @@
 void dumpUsage(void);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
 CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
+void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height);
 
 void dumpUsage(void) {
-    NSLog(@"Husqvarna SOURCE_FILE OUTPUT_FILE SETTINGS [...]");
+    NSLog(@"Husqvarna SOURCE_FILE_LOCATION OUTPUT_FILE_LOCATION OUTPUT_SETTINGS [...]");
 }
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
     CGFloat sourceWidth = CGImageGetWidth(sourceImage);
@@ -60,7 +61,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     }
     // set JPEG compression
     NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionFactor], kCGImageDestinationLossyCompressionQuality, nil];
-    CGImageDestinationAddImage(destination, image, (__bridge CFDictionaryRef)properties);
+    CGImageDestinationAddImage(destination, image, (__bridge_retained CFDictionaryRef)properties);
     BOOL status = CGImageDestinationFinalize(destination);
     if (!status) {
         NSLog(@"ERROR - failed to write scaled image to in-memory buffer");
@@ -72,12 +73,47 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
     return (CFDataRef)imageData;
 }
+void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, NSUInteger outputHeight) {
+    NSError* error = nil;
+    NSData* imageData = [[NSData alloc] initWithContentsOfURL:sourceFileURL options:0 error:&error];
+    if (!imageData) {
+        NSLog(@"ERROR - failed to read image %@", [error localizedDescription]);
+        exit(1);
+    }
+
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
+    if (!imageSource) {
+        NSLog(@"ERROR - failed to crate image source");
+    }
+    CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+    if (!image) {
+        NSLog(@"ERROR - failed to crate image from source");
+    }
+    if (imageSource)
+        CFRelease(imageSource);
+
+    CGFloat scaleFactor = MAX((CGFloat)outputWidth/CGImageGetWidth(image), (CGFloat)outputHeight/CGImageGetHeight(image));
+    CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
+    NSLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
+    CGImageRelease(image);
+
+    // grab JPEG compressed data from image
+    CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
+    CGImageRelease(scaledImage);
+
+    imageData = (__bridge_transfer NSData*)compressedImageData;
+    BOOL status = [imageData writeToURL:outputFileURL atomically:YES];
+    if (!status) {
+        NSLog(@"ERROR - failed to write compressed image to disk");
+        exit(1);
+    }
+}
 
 
 
 int main (int argc, const char * argv[]) {
     @autoreleasepool {
-        if (argc < 4) {
+        if (argc < 4 || argc % 2) {
             dumpUsage();
             exit(1);
         }
@@ -92,58 +128,27 @@ int main (int argc, const char * argv[]) {
             exit(1);
         }
 
-        NSString* outputFileLocation = [NSString stringWithUTF8String:argv[2]];
-        NSURL* outputFileURL = [NSURL fileURLWithString:outputFileLocation];
-        NSLog(@"outputFileURL: %@", outputFileURL);
-        if ([outputFileURL checkResourceIsReachableAndReturnError:NULL]) {
-            NSLog(@"will overwrite: %@", outputFileURL);
+        for (NSUInteger argIndex = 2; argIndex < argc; argIndex += 2) {
+            NSString* outputFileLocation = [NSString stringWithUTF8String:argv[argIndex]];
+            NSURL* outputFileURL = [NSURL fileURLWithString:outputFileLocation];
+            NSLog(@"outputFileURL: %@", outputFileURL);
+            if ([outputFileURL checkResourceIsReachableAndReturnError:NULL]) {
+                NSLog(@"will overwrite: %@", outputFileURL);
+            }
+
+            NSString* outputSettings = [NSString stringWithUTF8String:argv[argIndex+1]];
+            NSLog(@"outputSettings: %@", outputSettings);
+            NSArray* components = [[outputSettings lowercaseString] componentsSeparatedByString:@"x"];
+            if (components.count != 2) {
+                NSLog(@"ERROR - bad output size provided '%@' should be WxH", outputSettings);
+            }
+            NSUInteger outputWidth = [[components objectAtIndex:0] integerValue];
+            NSUInteger outputHeight = [[components objectAtIndex:1] integerValue];
+
+            NSLog(@"width: %lu, height: %lu", outputWidth, outputHeight);
+
+            runIt(sourceFileURL, outputFileURL, outputWidth, outputHeight);
         }
-
-        NSString* outputSettings = [NSString stringWithUTF8String:argv[3]];
-        NSLog(@"outputSettings: %@", outputSettings);
-        NSArray* components = [[outputSettings lowercaseString] componentsSeparatedByString:@"x"];
-        if (components.count != 2) {
-            NSLog(@"ERROR - bad output size provided '%@' should be WxH", outputSettings);
-        }
-        NSUInteger outputWidth = [[components objectAtIndex:0] integerValue];
-        NSUInteger outputHeight = [[components objectAtIndex:1] integerValue];
-
-        NSLog(@"width: %lu, height: %lu", outputWidth, outputHeight);
-
-
-        NSData* imageData = [[NSData alloc] initWithContentsOfURL:sourceFileURL options:0 error:&error];
-        if (!imageData) {
-            NSLog(@"ERROR - failed to read image %@", [error localizedDescription]);
-            exit(1);
-        }
-
-        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
-        if (!imageSource) {
-            NSLog(@"ERROR - failed to crate image source");
-        }
-        CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
-        if (!image) {
-            NSLog(@"ERROR - failed to crate image from source");
-        }
-        if (imageSource)
-            CFRelease(imageSource);
-
-        CGFloat scaleFactor = MAX((CGFloat)outputWidth/CGImageGetWidth(image), (CGFloat)outputHeight/CGImageGetHeight(image));
-        CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
-        NSLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
-        CGImageRelease(image);
-
-        // grab JPEG compressed data from image
-        CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
-        CGImageRelease(scaledImage);
-
-        imageData = (__bridge_transfer NSData*)compressedImageData;
-        BOOL status = [imageData writeToURL:outputFileURL atomically:YES];
-        if (!status) {
-            NSLog(@"ERROR - failed to write compressed image to disk");
-            exit(1);
-        }
-
     }
     return 0;
 }
