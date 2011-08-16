@@ -11,6 +11,7 @@
 		D8616E9113FA05DE00C6F761 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8616E9013FA05DE00C6F761 /* main.m */; };
 		D8616E9513FA05DE00C6F761 /* Husqvarna.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8616E9413FA05DE00C6F761 /* Husqvarna.1 */; };
 		D8616EA113FA192100C6F761 /* NSURL+CCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8616EA013FA192100C6F761 /* NSURL+CCAdditions.m */; };
+		D8616EA613FA241D00C6F761 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8616EA513FA241D00C6F761 /* ApplicationServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		D8616E9413FA05DE00C6F761 /* Husqvarna.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Husqvarna.1; sourceTree = "<group>"; };
 		D8616E9F13FA192100C6F761 /* NSURL+CCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+CCAdditions.h"; sourceTree = "<group>"; };
 		D8616EA013FA192100C6F761 /* NSURL+CCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+CCAdditions.m"; sourceTree = "<group>"; };
+		D8616EA513FA241D00C6F761 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8616E8E13FA05DE00C6F761 /* Foundation.framework in Frameworks */,
+				D8616EA613FA241D00C6F761 /* ApplicationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				D8616E8D13FA05DE00C6F761 /* Foundation.framework */,
+				D8616EA513FA241D00C6F761 /* ApplicationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
