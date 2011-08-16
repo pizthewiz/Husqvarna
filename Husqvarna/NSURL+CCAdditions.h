@@ -9,4 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSURL(CCAdditions)
++ (id)fileURLWithString:(NSString*)string;
++ (id)fileURLWithString:(NSString*)string relativeToURL:(NSURL*)baseURL;
 @end
