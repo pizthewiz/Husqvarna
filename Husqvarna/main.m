@@ -118,6 +118,8 @@ int main (int argc, const char * argv[]) {
             exit(1);
         }
 
+        NSLog(@"%@", [NSString stringWithUTF8String:argv[0]]);
+
         NSString* sourceFileLocation = [NSString stringWithUTF8String:argv[1]];
         NSURL* sourceFileURL = [NSURL fileURLWithString:sourceFileLocation];
 //        NSLog(@"sourceFileURL: %@", sourceFileURL);
@@ -134,6 +136,18 @@ int main (int argc, const char * argv[]) {
             NSLog(@"outputFileURL: %@", outputFileURL);
             if ([outputFileURL checkResourceIsReachableAndReturnError:NULL]) {
                 NSLog(@"will overwrite: %@", outputFileURL);
+            }
+
+            // create intermediate directories when necessary
+            NSURL* baseDirectory = [outputFileURL URLByDeletingLastPathComponent];
+            if (![baseDirectory checkResourceIsReachableAndReturnError:NULL]) {
+                NSLog(@"attempting to create base directory: %@", baseDirectory);
+                NSError* error;
+                BOOL success = [[NSFileManager defaultManager] createDirectoryAtURL:baseDirectory withIntermediateDirectories:YES attributes:nil error:&error];
+                if (!success) {
+                    NSLog(@"ERROR - failed to create base directory %@ - %@", baseDirectory, [error localizedDescription]);
+                    exit(1);
+                }
             }
 
             NSString* outputSettings = [NSString stringWithUTF8String:argv[argIndex+1]];
