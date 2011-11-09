@@ -12,8 +12,8 @@
 
 void usage(const char * argv[]);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
-CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
-void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height, CGFloat compressionFactor);
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionQuality);
+void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height, CGFloat compressionQuality);
 
 void usage(const char * argv[]) {
     printf("usage: %s <source> <destination> <dimensions> <compression> ...\n", [[[NSString stringWithUTF8String:argv[0]] lastPathComponent] UTF8String]);
@@ -51,7 +51,7 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
 
     return scaledImage;
 }
-CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor) {
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionQuality) {
     CFMutableDataRef imageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
     CGImageDestinationRef destination = CGImageDestinationCreateWithData(imageData, kUTTypeJPEG, 1, NULL);
     if (!destination) {
@@ -60,7 +60,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         return NULL;
     }
     // set JPEG compression
-    NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionFactor], kCGImageDestinationLossyCompressionQuality, nil];
+    NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionQuality], kCGImageDestinationLossyCompressionQuality, nil];
     CGImageDestinationAddImage(destination, image, (__bridge_retained CFDictionaryRef)properties);
     BOOL status = CGImageDestinationFinalize(destination);
     if (!status) {
@@ -73,7 +73,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
     return (CFDataRef)imageData;
 }
-void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, NSUInteger outputHeight, CGFloat compressionFactor) {
+void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, NSUInteger outputHeight, CGFloat compressionQuality) {
     NSError* error = nil;
     NSData* imageData = [[NSData alloc] initWithContentsOfURL:sourceFileURL options:0 error:&error];
     if (!imageData) {
@@ -98,7 +98,7 @@ void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, N
     CGImageRelease(image);
 
     // grab JPEG compressed data from image
-    CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, compressionFactor);
+    CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, compressionQuality);
     CGImageRelease(scaledImage);
 
     imageData = (__bridge_transfer NSData*)compressedImageData;
@@ -162,10 +162,10 @@ int main (int argc, const char * argv[]) {
             NSLog(@"width: %lu, height: %lu", outputWidth, outputHeight);
 
             NSString* compressionString = [NSString stringWithUTF8String:argv[argIndex++]];
-            CGFloat compressionFactor = [compressionString floatValue];
-            NSLog(@"compressionFactor: %f", compressionFactor);
+            CGFloat compressionQuality = [compressionString floatValue];
+            NSLog(@"compressionQuality: %f", compressionQuality);
 
-            runIt(sourceFileURL, outputFileURL, outputWidth, outputHeight, compressionFactor);
+            runIt(sourceFileURL, outputFileURL, outputWidth, outputHeight, compressionQuality);
         }
     }
     return 0;
