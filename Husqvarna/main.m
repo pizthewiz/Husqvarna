@@ -10,13 +10,13 @@
 #import <ApplicationServices/ApplicationServices.h>
 #import "NSURL+CCAdditions.h"
 
-void dumpUsage(void);
+void usage(const char * argv[]);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
 CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
-void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height);
+void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height, CGFloat compressionFactor);
 
-void dumpUsage(void) {
-    NSLog(@"Husqvarna SOURCE_FILE_LOCATION OUTPUT_FILE_LOCATION OUTPUT_SETTINGS [...]");
+void usage(const char * argv[]) {
+    printf("usage: %s <source> <destination> <dimensions> <compression> ...\n", [[[NSString stringWithUTF8String:argv[0]] lastPathComponent] UTF8String]);
 }
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
     CGFloat sourceWidth = CGImageGetWidth(sourceImage);
@@ -73,7 +73,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
     return (CFDataRef)imageData;
 }
-void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, NSUInteger outputHeight) {
+void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, NSUInteger outputHeight, CGFloat compressionFactor) {
     NSError* error = nil;
     NSData* imageData = [[NSData alloc] initWithContentsOfURL:sourceFileURL options:0 error:&error];
     if (!imageData) {
@@ -98,7 +98,7 @@ void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, N
     CGImageRelease(image);
 
     // grab JPEG compressed data from image
-    CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
+    CFDataRef compressedImageData = CreateCompressedJPEGDataFromImage(scaledImage, compressionFactor);
     CGImageRelease(scaledImage);
 
     imageData = (__bridge_transfer NSData*)compressedImageData;
@@ -113,8 +113,8 @@ void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, N
 
 int main (int argc, const char * argv[]) {
     @autoreleasepool {
-        if (argc < 4 || argc % 2) {
-            dumpUsage();
+        if (argc < 5 || (argc-2) % 3) {
+            usage(argv);
             exit(1);
         }
 
@@ -130,9 +130,9 @@ int main (int argc, const char * argv[]) {
             exit(1);
         }
 
-        for (NSUInteger argIndex = 2; argIndex < argc; argIndex += 2) {
-            NSString* outputFileLocation = [NSString stringWithUTF8String:argv[argIndex]];
-            NSURL* outputFileURL = [NSURL fileURLWithString:outputFileLocation];
+        for (NSUInteger argIndex = 2; argIndex < argc;) {
+            NSString* outputFileLocation = [NSString stringWithUTF8String:argv[argIndex++]];
+            NSURL* outputFileURL = [[NSURL alloc] initFileURLWithPossiblyRelativePath:outputFileLocation isDirectory:NO];
             NSLog(@"outputFileURL: %@", outputFileURL);
             if ([outputFileURL checkResourceIsReachableAndReturnError:NULL]) {
                 NSLog(@"will overwrite: %@", outputFileURL);
@@ -150,18 +150,22 @@ int main (int argc, const char * argv[]) {
                 }
             }
 
-            NSString* outputSettings = [NSString stringWithUTF8String:argv[argIndex+1]];
-            NSLog(@"outputSettings: %@", outputSettings);
-            NSArray* components = [[outputSettings lowercaseString] componentsSeparatedByString:@"x"];
-            if (components.count != 2) {
-                NSLog(@"ERROR - bad output size provided '%@' should be WxH", outputSettings);
-            }
-            NSUInteger outputWidth = [[components objectAtIndex:0] integerValue];
-            NSUInteger outputHeight = [[components objectAtIndex:1] integerValue];
+            NSString* outputDimensions = [NSString stringWithUTF8String:argv[argIndex++]];
+            NSLog(@"outputDimensions: %@", outputDimensions);
 
+            NSSize size = outputDimensions ? NSSizeFromString(outputDimensions) : NSZeroSize;
+            if (NSEqualSizes(size, NSZeroSize)) {
+                NSLog(@"ERROR - bad output size provided '%@' should be WxH", outputDimensions);
+            }
+            NSUInteger outputWidth = (NSUInteger)size.width;
+            NSUInteger outputHeight = (NSUInteger)size.height;
             NSLog(@"width: %lu, height: %lu", outputWidth, outputHeight);
 
-            runIt(sourceFileURL, outputFileURL, outputWidth, outputHeight);
+            NSString* compressionString = [NSString stringWithUTF8String:argv[argIndex++]];
+            CGFloat compressionFactor = [compressionString floatValue];
+            NSLog(@"compressionFactor: %f", compressionFactor);
+
+            runIt(sourceFileURL, outputFileURL, outputWidth, outputHeight, compressionFactor);
         }
     }
     return 0;

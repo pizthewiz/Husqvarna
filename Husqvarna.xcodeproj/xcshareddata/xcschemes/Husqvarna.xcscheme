@@ -28,6 +28,15 @@
       buildConfiguration = "Debug">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D8616E8813FA05DE00C6F761"
+            BuildableName = "Husqvarna"
+            BlueprintName = "Husqvarna"
+            ReferencedContainer = "container:Husqvarna.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
@@ -60,11 +69,19 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "0.5"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "~/Desktop/PB_1312413247_PROXY_SMALL.JPG"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "384x256"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "0.4"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
