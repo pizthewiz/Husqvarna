@@ -34,4 +34,17 @@
     return url;
 }
 
+- (id)initFileURLWithPossiblyRelativePath:(NSString*)filePath isDirectory:(BOOL)isDir {
+    if ([filePath hasPrefix:@"../"] || [filePath hasPrefix:@"./"]) {
+        NSString* currentDirectoryPath = [[NSFileManager defaultManager] currentDirectoryPath];
+        filePath = [currentDirectoryPath stringByAppendingPathComponent:[filePath stringByStandardizingPath]];
+    }
+    filePath = [filePath stringByStandardizingPath];
+
+    self = [self initFileURLWithPath:filePath isDirectory:isDir];
+    if (self) {
+    }
+    return self;
+}
+
 @end

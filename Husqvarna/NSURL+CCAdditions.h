@@ -11,4 +11,5 @@
 @interface NSURL(CCAdditions)
 + (id)fileURLWithString:(NSString*)string;
 + (id)fileURLWithString:(NSString*)string relativeToURL:(NSURL*)baseURL;
+- (id)initFileURLWithPossiblyRelativePath:(NSString*)path isDirectory:(BOOL)isDir;
 @end
