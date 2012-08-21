@@ -3,7 +3,7 @@
 //  Husqvarna
 //
 //  Created by Jean-Pierre Mouilleseaux on 15 Aug 2011.
-//  Copyright (c) 2011 Chorded Constructions. All rights reserved.
+//  Copyright (c) 2011-2012 Chorded Constructions. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,37 +12,32 @@
 
 void usage(const char * argv[]);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
-CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionQuality);
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
 void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height, CGFloat compressionQuality);
 
 void usage(const char * argv[]) {
     printf("usage: %s <source> <destination> <dimensions> <compression> ...\n", [[[NSString stringWithUTF8String:argv[0]] lastPathComponent] UTF8String]);
 }
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
-    CGFloat sourceWidth = CGImageGetWidth(sourceImage);
-    CGFloat sourceHeight = CGImageGetHeight(sourceImage);
-    CGFloat scaledWidth = floorf(sourceWidth * scaleFactor);
-    CGFloat scaledHeight = floorf(sourceHeight * scaleFactor);
+    size_t sourceWidth = CGImageGetWidth(sourceImage);
+    size_t sourceHeight = CGImageGetHeight(sourceImage);
+    size_t scaledWidth = floorf(sourceWidth * scaleFactor);
+    size_t scaledHeight = floorf(sourceHeight * scaleFactor);
 
     size_t bytesPerRow = scaledWidth * 4;
-    if (bytesPerRow % 16)
+    if (bytesPerRow % 16) {
         bytesPerRow = ((bytesPerRow / 16) + 1) * 16;
-
-    void* baseAddress = valloc(scaledHeight * bytesPerRow);
-    if (baseAddress == NULL) {
-        NSLog(@"ERROR - failed to valloc memory for bitmap");
-        return NULL;
     }
 
-    CGContextRef bitmapContext = CGBitmapContextCreate(baseAddress, scaledWidth, scaledHeight, 8, bytesPerRow, CGImageGetColorSpace(sourceImage), kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
-    if (bitmapContext == NULL) {
-        free(baseAddress);
+    CGContextRef bitmapContext = CGBitmapContextCreate(NULL, scaledWidth, scaledHeight, 8, bytesPerRow, CGImageGetColorSpace(sourceImage), kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
+    if (!bitmapContext) {
+        NSLog(@"ERROR - failed to create bitmap context to rescale image");
         return NULL;
     }
 
     CGContextScaleCTM(bitmapContext, scaleFactor, scaleFactor);
 
-    CGRect bounds = CGRectMake(0., 0., sourceWidth, sourceHeight);
+    CGRect bounds = (CGRect){.size.width = sourceWidth, .size.height = sourceHeight};
     CGContextClearRect(bitmapContext, bounds);
     CGContextDrawImage(bitmapContext, bounds, sourceImage);
 
@@ -51,7 +46,8 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
 
     return scaledImage;
 }
-CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionQuality) {
+
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor) {
     CFMutableDataRef imageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
     CGImageDestinationRef destination = CGImageDestinationCreateWithData(imageData, kUTTypeJPEG, 1, NULL);
     if (!destination) {
@@ -60,8 +56,8 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         return NULL;
     }
     // set JPEG compression
-    NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionQuality], kCGImageDestinationLossyCompressionQuality, nil];
-    CGImageDestinationAddImage(destination, image, (__bridge_retained CFDictionaryRef)properties);
+    NSDictionary* properties = @{(id)kCGImageDestinationLossyCompressionQuality: @(compressionFactor)};
+    CGImageDestinationAddImage(destination, image, (__bridge CFDictionaryRef)properties);
     BOOL status = CGImageDestinationFinalize(destination);
     if (!status) {
         NSLog(@"ERROR - failed to write scaled image to in-memory buffer");
