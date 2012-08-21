@@ -10,6 +10,8 @@
 #import <ApplicationServices/ApplicationServices.h>
 #import "NSURL+CCAdditions.h"
 
+#define VERSION "v0.1.1-pre"
+
 void usage(const char * argv[]);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
 CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
