@@ -10,15 +10,22 @@
 #import <ApplicationServices/ApplicationServices.h>
 #import "NSURL+CCAdditions.h"
 
+#define NAME "Husqvarna"
 #define VERSION "v0.1.1-pre"
 
-void usage(const char * argv[]);
+void usage(void);
+void printVersion(void);
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
 CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
 void runIt(NSURL* source, NSURL* destination, NSUInteger width, NSUInteger height, CGFloat compressionQuality);
 
-void usage(const char * argv[]) {
-    printf("usage: %s <source> <destination> <dimensions> <compression> ...\n", [[[NSString stringWithUTF8String:argv[0]] lastPathComponent] UTF8String]);
+void usage(void) {
+    printf("usage: %s <source> <destination> <dimensions> <compression> ...\n", NAME);
+    printf("\nOPTIONS:\n");
+    printf("  --version\t\tprint %s's version\n\n", NAME);
+}
+void printVersion(void) {
+    printf("%s %s\n", NAME, VERSION);
 }
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
     size_t sourceWidth = CGImageGetWidth(sourceImage);
@@ -48,7 +55,6 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
 
     return scaledImage;
 }
-
 CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor) {
     CFMutableDataRef imageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
     CGImageDestinationRef destination = CGImageDestinationCreateWithData(imageData, kUTTypeJPEG, 1, NULL);
@@ -111,8 +117,17 @@ void runIt(NSURL* sourceFileURL, NSURL* outputFileURL, NSUInteger outputWidth, N
 
 int main (int argc, const char * argv[]) {
     @autoreleasepool {
+        // arg-less switches
+        for (NSUInteger idx = 1; idx < argc; idx++) {
+            NSString* arg = [NSString stringWithUTF8String:argv[idx]];
+            if ([arg isEqualToString:@"--version"]) {
+                printVersion();
+                return 0;
+            }
+        }
+
         if (argc < 5 || (argc-2) % 3) {
-            usage(argv);
+            usage();
             exit(1);
         }
 
