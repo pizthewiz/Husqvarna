@@ -11,7 +11,7 @@
 #import "NSURL+CCAdditions.h"
 
 #define NAME "Husqvarna"
-#define VERSION "v0.1.1-pre"
+#define VERSION "v0.1.1"
 
 void usage(void);
 void printVersion(void);
