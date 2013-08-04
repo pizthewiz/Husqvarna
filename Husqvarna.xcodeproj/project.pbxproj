@@ -36,6 +36,9 @@
 		D8616E9F13FA192100C6F761 /* NSURL+CCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+CCAdditions.h"; sourceTree = "<group>"; };
 		D8616EA013FA192100C6F761 /* NSURL+CCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+CCAdditions.m"; sourceTree = "<group>"; };
 		D8616EA513FA241D00C6F761 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		D8B5506817AEF8400040D4BA /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
+		D8B5506917AEF8400040D4BA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		D8B5506A17AEF8400040D4BA /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,9 @@
 				D8616E9013FA05DE00C6F761 /* main.m */,
 				D8616E9413FA05DE00C6F761 /* Husqvarna.1 */,
 				D8616E9213FA05DE00C6F761 /* Supporting Files */,
+				D8B5506917AEF8400040D4BA /* README.md */,
+				D8B5506817AEF8400040D4BA /* CHANGELOG.md */,
+				D8B5506A17AEF8400040D4BA /* TODO.md */,
 			);
 			path = Husqvarna;
 			sourceTree = "<group>";
