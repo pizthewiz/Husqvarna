@@ -3,7 +3,7 @@
 //  Husqvarna
 //
 //  Created by Jean-Pierre Mouilleseaux on 15 Aug 2011.
-//  Copyright (c) 2011-2012 Chorded Constructions. All rights reserved.
+//  Copyright (c) 2011-2014 Chorded Constructions. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,7 +11,7 @@
 #import "NSURL+CCAdditions.h"
 
 #define NAME "Husqvarna"
-#define VERSION "v0.1.1"
+#define VERSION "v0.1.2-pre"
 
 void usage(void);
 void printVersion(void);
