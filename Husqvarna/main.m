@@ -46,7 +46,7 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
 
     CGContextScaleCTM(bitmapContext, scaleFactor, scaleFactor);
 
-    CGRect bounds = (CGRect){.size.width = sourceWidth, .size.height = sourceHeight};
+    CGRect bounds = CGRectMake(0.0, 0.0, sourceWidth, sourceHeight);
     CGContextClearRect(bitmapContext, bounds);
     CGContextDrawImage(bitmapContext, bounds, sourceImage);
 
@@ -119,7 +119,7 @@ int main (int argc, const char * argv[]) {
     @autoreleasepool {
         // arg-less switches
         for (NSUInteger idx = 1; idx < argc; idx++) {
-            NSString* arg = [NSString stringWithUTF8String:argv[idx]];
+            NSString* arg = @(argv[idx]);
             if ([arg isEqualToString:@"--version"]) {
                 printVersion();
                 return 0;
@@ -131,9 +131,9 @@ int main (int argc, const char * argv[]) {
             exit(1);
         }
 
-        NSLog(@"%@", [NSString stringWithUTF8String:argv[0]]);
+        NSLog(@"%@", @(argv[0]));
 
-        NSString* sourceFileLocation = [NSString stringWithUTF8String:argv[1]];
+        NSString* sourceFileLocation = @(argv[1]);
         NSURL* sourceFileURL = [NSURL fileURLWithString:sourceFileLocation];
 //        NSLog(@"sourceFileURL: %@", sourceFileURL);
 
@@ -144,7 +144,7 @@ int main (int argc, const char * argv[]) {
         }
 
         for (NSUInteger argIndex = 2; argIndex < argc;) {
-            NSString* outputFileLocation = [NSString stringWithUTF8String:argv[argIndex++]];
+            NSString* outputFileLocation = @(argv[argIndex++]);
             NSURL* outputFileURL = [[NSURL alloc] initFileURLWithPossiblyRelativePath:outputFileLocation isDirectory:NO];
             NSLog(@"outputFileURL: %@", outputFileURL);
             if ([outputFileURL checkResourceIsReachableAndReturnError:NULL]) {
@@ -163,7 +163,7 @@ int main (int argc, const char * argv[]) {
                 }
             }
 
-            NSString* outputDimensions = [NSString stringWithUTF8String:argv[argIndex++]];
+            NSString* outputDimensions = @(argv[argIndex++]);
             NSLog(@"outputDimensions: %@", outputDimensions);
 
             NSSize size = outputDimensions ? NSSizeFromString(outputDimensions) : NSZeroSize;
@@ -174,7 +174,7 @@ int main (int argc, const char * argv[]) {
             NSUInteger outputHeight = (NSUInteger)size.height;
             NSLog(@"width: %lu, height: %lu", outputWidth, outputHeight);
 
-            NSString* compressionString = [NSString stringWithUTF8String:argv[argIndex++]];
+            NSString* compressionString = @(argv[argIndex++]);
             CGFloat compressionQuality = [compressionString floatValue];
             NSLog(@"compressionQuality: %f", compressionQuality);
 
